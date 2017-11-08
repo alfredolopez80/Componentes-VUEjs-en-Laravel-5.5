@@ -58688,10 +58688,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
 
+
+__WEBPACK_IMPORTED_MODULE_2_moment___default.a.lang('es');
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -58705,6 +58709,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.getIdeas();
     },
     methods: {
+        since: function since(d) {
+            return __WEBPACK_IMPORTED_MODULE_2_moment___default()(d).fromNow();
+        },
         getIdeas: function getIdeas(page) {
             var _this = this;
 
@@ -58723,6 +58730,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this2.getIdeas();
                 _this2.newIdea = '';
                 __WEBPACK_IMPORTED_MODULE_1_toastr___default.a.success('Nueva idea registrada');
+            }).catch(function (error) {
+                __WEBPACK_IMPORTED_MODULE_1_toastr___default.a.error('Error');
             });
         }
     }
@@ -59445,46 +59454,44 @@ var render = function() {
     _c("div", { staticClass: "well" }, [
       _c("h4", [_vm._v("¿En que estás pensando?")]),
       _vm._v(" "),
-      _c("div", { staticClass: "input-group" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.newIdea,
-              expression: "newIdea"
-            }
-          ],
-          staticClass: "form-control input-sm",
-          attrs: { type: "text", maxlength: "256" },
-          domProps: { value: _vm.newIdea },
+      _c(
+        "form",
+        {
           on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.newIdea = $event.target.value
+            submit: function($event) {
+              $event.preventDefault()
+              _vm.createIdea($event)
             }
           }
-        }),
-        _vm._v(" "),
-        _c("span", { staticClass: "input-group-btn" }, [
-          _c(
-            "a",
-            {
-              staticClass: "btn btn-primary btn-sm",
-              attrs: { href: "#" },
+        },
+        [
+          _c("div", { staticClass: "input-group" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.newIdea,
+                  expression: "newIdea"
+                }
+              ],
+              staticClass: "form-control input-sm",
+              attrs: { type: "text", maxlength: "256" },
+              domProps: { value: _vm.newIdea },
               on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  _vm.createIdea($event)
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.newIdea = $event.target.value
                 }
               }
-            },
-            [_vm._v("\n                    Agregar\n                ")]
-          )
-        ])
-      ]),
+            }),
+            _vm._v(" "),
+            _vm._m(0)
+          ])
+        ]
+      ),
       _vm._v(" "),
       _c("hr"),
       _vm._v(" "),
@@ -59495,7 +59502,7 @@ var render = function() {
           return _c("li", [
             _c("p", [
               _c("small", { staticClass: "text-muted" }, [
-                _c("em", [_vm._v(_vm._s(idea.created_at))])
+                _c("em", [_vm._v(_vm._s(_vm.since(idea.created_at)))])
               ]),
               _vm._v(
                 " \n                    " +
@@ -59509,7 +59516,20 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "input-group-btn" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary btn-sm", attrs: { type: "submit" } },
+        [_vm._v("\n                        Agregar\n                    ")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

@@ -3,19 +3,21 @@
         <h2 class="text-center">Captura tus ideas</h2>
         <div class="well">
             <h4>¿En que estás pensando?</h4>
-            <div class="input-group">
-                <input type="text" class="form-control input-sm" v-model="newIdea" maxlength="256">
-                <span class="input-group-btn">
-                    <a href="#" class="btn btn-primary btn-sm" v-on:click.prevent="createIdea">
-                        Agregar
-                    </a>
-                </span>
-            </div>        
+            <form v-on:submit.prevent="createIdea">
+                <div class="input-group">
+                    <input type="text" class="form-control input-sm" v-model="newIdea" maxlength="256">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            Agregar
+                        </button>
+                    </span>
+                </div>        
+            </form>
             <hr>
             <ul class="list-unstyled">
                 <li v-for="idea in ideas">                    
                     <p>
-                        <small class="text-muted"><em>{{ idea.created_at }}</em></small> 
+                        <small class="text-muted"><em>{{ since(idea.created_at) }}</em></small> 
                         {{ idea.description }}
                     </p>
                 </li>
@@ -25,11 +27,11 @@
 </template>
 
 <script>
-    import axios from 'axios'
+    import axios  from 'axios'
     import toastr from 'toastr'
     import moment from 'moment'
 
-    
+    moment.lang('es');
     
     export default {
         data () {
@@ -42,6 +44,9 @@
             this.getIdeas();
         },
         methods: {
+            since: function(d) {
+                return moment(d).fromNow();
+            },
             getIdeas: function(page) {
                 var urlIdeas = 'mis-ideas';
                 axios.get(urlIdeas).then(response => {
@@ -56,6 +61,8 @@
                     this.getIdeas();
                     this.newIdea = '';
                     toastr.success('Nueva idea registrada');
+                }).catch(error => {
+                    toastr.error('Error');
                 });
             }
         }
